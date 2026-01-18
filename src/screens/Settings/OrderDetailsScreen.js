@@ -6,6 +6,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import PaymentDetails from './PaymentDetails';
 import BackIcon from '../../../assets/icons/backLeft.svg';
 import { spacing, fontScale, moderateScale } from '../../utils/responsive';
+import { fontFamily } from '../../theme/typography';
 
 export default function OrderDetailsScreen() {
   const navigation = useNavigation();
@@ -53,7 +54,10 @@ export default function OrderDetailsScreen() {
         <PaymentDetails />
 
         <LinearGradient
-          colors={['#6D5FFD', '#9A4DFF']}
+          colors={['#667AFF', '#9324F0', '#4010AB']}
+          locations={[0.0128, 0.5002, 0.9876]}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.52 }}
           style={styles.invoiceBtn}
         >
           <Text style={styles.invoiceText}>Get Invoice</Text>
@@ -79,14 +83,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#FFF',
     fontSize: fontScale(18),
-    fontWeight: '700',
+    fontFamily: fontFamily.bold,
   },
 
   product: {
     color: '#FFF',
     fontSize: fontScale(18),
-    fontWeight: '600',
     marginTop: spacing.md,
+    fontFamily: fontFamily.semiBold,
   },
   orderId: {
     color: '#8E8E93',
@@ -104,10 +108,12 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontWeight: '600',
     marginBottom: spacing.sm,
+    fontFamily: fontFamily.semiBold,
   },
   text: {
     color: '#CCC',
     marginBottom: spacing.xs,
+    fontFamily: fontFamily.regular,
   },
 
   timelineRow: {
@@ -124,11 +130,13 @@ const styles = StyleSheet.create({
   },
   timelineText: {
     color: '#FFF',
-    fontWeight: '500',
+    // fontWeight: '500',
+    fontFamily: fontFamily.regular,
   },
   timelineDate: {
     color: '#8E8E93',
     fontSize: fontScale(12),
+    fontFamily: fontFamily.medium,
   },
 
   invoiceBtn: {
@@ -140,6 +148,6 @@ const styles = StyleSheet.create({
   },
   invoiceText: {
     color: '#FFF',
-    fontWeight: '600',
+    fontFamily: fontFamily.semiBold,
   },
 });

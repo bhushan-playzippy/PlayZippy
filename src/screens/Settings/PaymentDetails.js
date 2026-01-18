@@ -4,6 +4,7 @@ import CashIcon from '../../../assets/icons/cash.svg'; // replace with your icon
 import DownloadIcon from '../../../assets/icons/download.svg'; // replace with your icon
 
 import { spacing, fontScale, moderateScale } from '../../utils/responsive';
+import { fontFamily } from '../../theme/typography';
 
 export default function PaymentDetails() {
   return (
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   title: {
     color: '#FFFFFF',
     fontSize: fontScale(16),
-    fontWeight: '600',
+    fontFamily: fontFamily.semiBold,
     marginBottom: spacing.md,
   },
 
@@ -88,16 +89,18 @@ const styles = StyleSheet.create({
   label: {
     color: '#8E8E93',
     fontSize: fontScale(14),
+    fontFamily: fontFamily.medium,
   },
 
   value: {
     color: '#FFFFFF',
     fontSize: fontScale(14),
+    fontFamily: fontFamily.regular,
   },
 
   boldText: {
-    fontWeight: '700',
     color: '#FFFFFF',
+    fontFamily: fontFamily.bold,
   },
 
   negative: {
@@ -124,6 +127,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: fontScale(14),
     marginLeft: spacing.sm,
+    fontFamily: fontFamily.semiBold,
   },
 
   invoiceRow: {
@@ -137,5 +141,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: fontScale(14),
     marginRight: spacing.xs,
+    fontFamily: fontFamily.semiBold,
   },
 });

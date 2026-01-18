@@ -12,6 +12,7 @@ import {
   fontScale,
   spacing,
 } from '../../utils/responsive';
+import { fontFamily } from '../../theme/typography';
 
 export default function LogoutModal({ visible, onConfirm, onCancel }) {
   return (
@@ -45,8 +46,9 @@ export default function LogoutModal({ visible, onConfirm, onCancel }) {
             <TouchableOpacity style={{ flex: 1 }} onPress={onCancel}>
               <LinearGradient
                 colors={['#667AFF', '#9324F0', '#4010AB']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
+                locations={[0.0128, 0.5002, 0.9876]}
+                start={{ x: 0, y: 0.5 }}
+                end={{ x: 1, y: 0.52 }}
                 style={styles.primaryBtn}
               >
                 <Text style={styles.primaryText}>No</Text>
@@ -94,7 +96,7 @@ const styles = StyleSheet.create({
   title: {
     color: '#FFFFFF',
     fontSize: fontScale(18),
-    fontWeight: '700',
+    fontFamily: fontFamily.semiBold,
     marginBottom: spacing.sm,
   },
 
@@ -102,6 +104,7 @@ const styles = StyleSheet.create({
     color: '#8E8E93',
     fontSize: fontScale(14),
     textAlign: 'center',
+    fontFamily: fontFamily.medium,
     marginBottom: spacing.lg,
   },
 
@@ -124,7 +127,7 @@ const styles = StyleSheet.create({
   outlineText: {
     color: '#6D5FFD',
     fontSize: fontScale(14),
-    fontWeight: '600',
+    fontFamily: fontFamily.semiBold,
   },
 
   primaryBtn: {
@@ -138,5 +141,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: fontScale(14),
     fontWeight: '600',
+    fontFamily: fontFamily.semiBold,
   },
 });

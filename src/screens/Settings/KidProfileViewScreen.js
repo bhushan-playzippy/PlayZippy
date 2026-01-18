@@ -9,24 +9,55 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
+import GradientBorder from '../../components/GradientCard';
 
 import BackIcon from '../../../assets/icons/backLeft.svg';
+import GirlIcon from '../../../assets/icons/girl.svg';
+import BoyIcon from '../../../assets/icons/boy.svg';
+import GirlKidIcon from '../../../assets/icons/girlKid.svg';
+import BoyKidIcon from '../../../assets/icons/boyKid.svg';
 import EditIcon from '../../../assets/icons/edit.svg';
-import GuardrailIcon from '../../../assets/icons/guardrail.svg';
-import LearningIcon from '../../../assets/icons/learning.svg';
+import ContentSafetyIcon from '../../../assets/icons/contentSafety.svg';
+import ParentingIcon from '../../../assets/icons/parenting.svg';
+
 import { useKidsProfileStore } from '../../store/kidsProfile.store';
 
 /* 🔥 RESPONSIVE UTILS */
-import { spacing, fontScale, moderateScale } from '../../utils/responsive';
+import {
+  spacing,
+  fontScale,
+  moderateScale,
+  scale,
+} from '../../utils/responsive';
 import { fontFamily } from '../../theme/typography';
 
 export default function KidProfileViewScreen() {
   const navigation = useNavigation();
 
-  const guardrails = useKidsProfileStore(state => state.guardrails);
-  const learningThemes = useKidsProfileStore(state => state.learningThemes);
+  const guardrails = useKidsProfileStore(state => state.contentSafety);
+  const learningThemes = useKidsProfileStore(state => state.parenting);
   const kidProfile = useKidsProfileStore(state => state.kidProfile);
   const setEditMode = useKidsProfileStore(state => state.setEditMode);
+
+  const getAgeInYears = dob => {
+    if (!dob) return null;
+
+    const birthDate = new Date(dob);
+    if (isNaN(birthDate.getTime())) return null;
+
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age;
+  };
+
+  const age = getAgeInYears(kidProfile.dob);
+  const showKidIcons = age === null || age <= 5;
 
   if (!kidProfile) {
     return null;
@@ -65,7 +96,29 @@ export default function KidProfileViewScreen() {
           <LinearGradient
             colors={['#8B5CFF', '#C77DFF']}
             style={styles.avatarRing}
-          />
+          >
+            {kidProfile.gender === 'Girl' ? (
+              showKidIcons ? (
+                <GirlKidIcon
+                  width={moderateScale(90)}
+                  height={moderateScale(90)}
+                />
+              ) : (
+                <GirlIcon
+                  width={moderateScale(90)}
+                  height={moderateScale(90)}
+                />
+              )
+            ) : showKidIcons ? (
+              <BoyKidIcon
+                width={moderateScale(90)}
+                height={moderateScale(90)}
+              />
+            ) : (
+              <BoyIcon width={moderateScale(90)} height={moderateScale(84)} />
+            )}
+          </LinearGradient>
+
           <View style={styles.statusDot} />
         </View>
 
@@ -81,17 +134,19 @@ export default function KidProfileViewScreen() {
         </View>
 
         {/* GUARDRAILS */}
-        <View style={styles.card}>
+        <GradientBorder>
           <View style={styles.cardHeader}>
             <View style={styles.cardHeaderLeft}>
-              <GuardrailIcon
-                width={moderateScale(18)}
-                height={moderateScale(18)}
+              <ContentSafetyIcon
+                width={moderateScale(20)}
+                height={moderateScale(20)}
               />
-              <Text style={styles.cardTitle}>Guardrails</Text>
+              <Text style={styles.cardTitle}>Content Safety</Text>
             </View>
 
-            <TouchableOpacity onPress={() => navigation.navigate('Guardrails')}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ContentSafety')}
+            >
               <EditIcon width={moderateScale(16)} height={moderateScale(16)} />
             </TouchableOpacity>
           </View>
@@ -103,22 +158,20 @@ export default function KidProfileViewScreen() {
               </View>
             ))}
           </ScrollView>
-        </View>
+        </GradientBorder>
 
         {/* LEARNING THEMES */}
-        <View style={styles.card}>
+        <GradientBorder>
           <View style={styles.cardHeader}>
             <View style={styles.cardHeaderLeft}>
-              <LearningIcon
-                width={moderateScale(18)}
-                height={moderateScale(18)}
+              <ParentingIcon
+                width={moderateScale(20)}
+                height={moderateScale(20)}
               />
-              <Text style={styles.cardTitle}>Learning Themes</Text>
+              <Text style={styles.cardTitle}>Parenting</Text>
             </View>
 
-            <TouchableOpacity
-              onPress={() => navigation.navigate('LearningTheme')}
-            >
+            <TouchableOpacity onPress={() => navigation.navigate('Parenting')}>
               <EditIcon width={moderateScale(16)} height={moderateScale(16)} />
             </TouchableOpacity>
           </View>
@@ -130,7 +183,7 @@ export default function KidProfileViewScreen() {
               </View>
             ))}
           </ScrollView>
-        </View>
+        </GradientBorder>
       </ScrollView>
     </SafeAreaView>
   );
@@ -151,7 +204,7 @@ const styles = StyleSheet.create({
 
   headerCenter: {
     flex: 1,
-    alignItems: 'center',
+    marginHorizontal: scale(10),
   },
 
   headerTitle: {
@@ -172,7 +225,7 @@ const styles = StyleSheet.create({
   avatarRing: {
     width: moderateScale(110),
     height: moderateScale(110),
-    borderRadius: moderateScale(55),
+    borderRadius: moderateScale(100),
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -10,7 +10,12 @@ import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import WhatsappIcon from '../../../assets/icons/whatsapp.svg';
 
 // 🔥 RESPONSIVE UTILS
-import { spacing, fontScale, moderateScale } from '../../utils/responsive';
+import {
+  spacing,
+  fontScale,
+  moderateScale,
+  verticalScale,
+} from '../../utils/responsive';
 import { fontFamily } from '../../theme/typography';
 
 const FAQ_LIST = [
@@ -19,7 +24,7 @@ const FAQ_LIST = [
   'Device controllers',
   'Wippi Mobile App',
   'Troubleshooting',
-  'Warrynty, Repairs, Exchange & Return',
+  'Warranty, Repairs, Exchange & Return',
 ];
 
 export default function FaqScreen() {
@@ -33,14 +38,12 @@ export default function FaqScreen() {
           <BackIcon width={moderateScale(22)} height={moderateScale(22)} />
         </Pressable>
 
-        <View style={styles.headerCenter}>
+        <View style={styles.headerText}>
           <Text style={styles.title}>FAQ’s</Text>
           <Text style={styles.subtitle}>
             Find quick answers to your questions
           </Text>
         </View>
-
-        <View style={{ width: moderateScale(22) }} />
       </View>
 
       {/* FAQ LIST */}
@@ -59,7 +62,7 @@ export default function FaqScreen() {
             }}
           >
             <Text style={styles.faqText}>{item}</Text>
-            <ArrowRight width={moderateScale(24)} height={moderateScale(24)} />
+            <ArrowRight width={moderateScale(20)} height={moderateScale(20)} />
           </Pressable>
         ))}
       </ScrollView>
@@ -70,8 +73,9 @@ export default function FaqScreen() {
 
         <LinearGradient
           colors={['#667AFF', '#9324F0', '#4010AB']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
+          locations={[0.0128, 0.5002, 0.9876]}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.52 }}
           style={styles.contactBtn}
         >
           <Pressable
@@ -96,38 +100,39 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0E0E11',
-    paddingHorizontal: spacing.lg,
+    // paddingHorizontal: spacing.lg,
   },
 
   /* HEADER */
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: spacing.lg,
-  },
-
-  headerCenter: {
-    flex: 1,
-    marginHorizontal: spacing.lg,
+    paddingHorizontal: spacing.lg, // 16
+    paddingTop: verticalScale(12),
+    paddingBottom: verticalScale(20),
+    gap: spacing.md, // 12
   },
 
   title: {
     color: '#FFFFFF',
     fontSize: fontScale(18),
-    fontFamily: fontFamily.bold,
+    fontFamily: fontFamily.semiBold,
+    lineHeight: fontScale(22),
   },
 
   subtitle: {
+    marginTop: verticalScale(2), // 🔥 tighter
     color: '#8E8E93',
     fontSize: fontScale(13),
-    marginTop: spacing.xs,
     fontFamily: fontFamily.regular,
+    lineHeight: fontScale(18),
   },
 
   /* LIST */
   listContainer: {
     paddingTop: spacing.sm,
-    paddingBottom: moderateScale(140), // 🔥 space for CTA
+    paddingHorizontal: spacing.lg, // 🔥 move padding here
+    paddingBottom: moderateScale(160), // space for CTA
   },
 
   faqCard: {
@@ -136,16 +141,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: '#1C1C24',
     borderRadius: moderateScale(14),
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.lg, // 16
+    height: moderateScale(56),
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4, // 🔥 correct height
     marginBottom: spacing.sm,
-    height: moderateScale(60),
   },
 
   faqText: {
     color: '#FFFFFF',
     fontSize: fontScale(16),
-    fontFamily: fontFamily.semibold,
+    fontFamily: fontFamily.medium, // 🔥 not semibold
   },
 
   /* FOOTER */
@@ -153,22 +161,21 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: spacing.lg,
     right: spacing.lg,
-    bottom: spacing.lg,
+    bottom: verticalScale(20),
     alignItems: 'center',
   },
 
   footerText: {
     color: '#8E8E93',
     fontSize: fontScale(13),
-    marginBottom: spacing.md,
+    marginBottom: verticalScale(12),
     fontFamily: fontFamily.regular,
   },
 
   contactBtn: {
     width: '100%',
-    minHeight: moderateScale(52),
+    height: moderateScale(52),
     borderRadius: moderateScale(14),
-    marginBottom: spacing.lg,
   },
 
   contactPressable: {

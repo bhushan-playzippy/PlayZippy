@@ -11,6 +11,7 @@ import LogoutModal from './Settings/LogoutModal';
 
 // 🔥 RESPONSIVE UTILS
 import { spacing, fontScale, moderateScale } from '../utils/responsive';
+import { fontFamily } from '../theme/typography';
 
 export default function SettingsScreen() {
   const [showLogout, setShowLogout] = useState(false);
@@ -129,5 +130,6 @@ const styles = StyleSheet.create({
     color: '#888',
     fontSize: fontScale(12),
     textAlign: 'center',
+    fontFamily: fontFamily.medium,
   },
 });

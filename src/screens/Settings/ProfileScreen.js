@@ -22,6 +22,7 @@ import PhoneIcon from '../../../assets/icons/phone.svg';
 import EditIcon from '../../../assets/icons/editprofile.svg';
 import { fontFamily } from '../../theme/typography';
 import XClose from '../../../assets/icons/x-close.svg';
+import AppInput from '../../components/AppInput';
 import {
   scale,
   verticalScale,
@@ -165,7 +166,7 @@ export default function ProfileScreen() {
             <BackLeft width={24} height={24} fill="#FFFFFF" />
           </TouchableOpacity>
           <Text style={styles.title}>My Profile</Text>
-          <View style={{ width: 24 }} />
+          {/* <View style={{ width: 24 }} /> */}
         </View>
 
         {/* ================= VIEW MODE ================= */}
@@ -203,159 +204,141 @@ export default function ProfileScreen() {
 
         {/* ================= CREATE / EDIT ================= */}
         {mode !== 'view' && (
-          <View style={styles.form}>
-            <View style={getInputStyle('name')}>
-              <UserIcon
-                width={24}
-                height={24}
-                opacity={focusedField === 'name' ? 1 : 0.5}
-              />
-              <TextInput
-                placeholder="Name"
-                placeholderTextColor="#8E8E93"
+          <View style={{ flex: 1 }}>
+            <View style={styles.form}>
+              <AppInput
                 value={name}
+                placeholder="Name"
+                icon={<UserIcon width={24} height={24} />}
+                error={errors.name}
+                autoCapitalize="words"
                 onChangeText={text => {
                   const filtered = text.replace(/[^a-zA-Z\s]/g, '');
                   setName(filtered);
                   clearError('name');
                 }}
-                autoCapitalize="words"
-                style={styles.inputWithIcon}
-                onFocus={() => setFocusedField('name')}
-                onBlur={() => setFocusedField(null)}
               />
-            </View>
 
-            <View style={getInputStyle('email')}>
-              <MailIcon
-                width={24}
-                height={24}
-                opacity={focusedField === 'email' ? 1 : 0.5}
-              />
-              <TextInput
-                placeholder="E Mail"
-                placeholderTextColor="#8E8E93"
+              <AppInput
                 value={email}
+                placeholder="E Mail"
+                icon={<MailIcon width={24} height={24} />}
+                error={errors.email}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
                 onChangeText={text => {
                   const filtered = text.replace(/[^a-zA-Z0-9@._-]/g, '');
                   setEmail(filtered);
                   clearError('email');
                 }}
-                style={styles.inputWithIcon}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-                onFocus={() => setFocusedField('email')}
-                onBlur={() => setFocusedField(null)}
               />
-            </View>
 
-            <View style={getInputStyle('mobile')}>
-              <PhoneIcon
-                width={24}
-                height={24}
-                opacity={focusedField === 'mobile' ? 1 : 0.5}
-              />
-              <TextInput
+              <AppInput
                 value={mobile}
+                placeholder="99999 88888"
+                icon={<PhoneIcon width={24} height={24} />}
+                error={errors.mobile}
+                keyboardType="phone-pad"
                 onChangeText={text => {
                   const digitsOnly = text.replace(/[^0-9]/g, '').slice(0, 10);
                   setMobile(digitsOnly);
                   clearError('mobile');
                 }}
-                placeholder="99999 88888"
-                placeholderTextColor="#8E8E93"
-                keyboardType="phone-pad"
-                style={styles.inputWithIcon}
-                onFocus={() => setFocusedField('mobile')}
-                onBlur={() => setFocusedField(null)}
               />
-            </View>
 
-            <View
-              style={[
-                styles.relationGrid,
-                errors.relation && styles.relationErrorBox,
-              ]}
-            >
-              {/* Row 1 */}
-              <View style={styles.relationRow}>
-                <RelationItem
-                  label="Dad"
-                  selected={relation === 'Dad'}
-                  onPress={() => {
-                    setRelation('Dad');
-                    clearError('Dad');
-                  }}
-                />
-                <RelationItem
-                  label="Mom"
-                  selected={relation === 'Mom'}
-                  onPress={() => {
-                    setRelation('Mom');
-                    clearError('Mom');
-                  }}
-                />
-              </View>
-
-              {/* Row 2 */}
-              <View style={styles.relationRow}>
-                <RelationItem
-                  label="Grandfather"
-                  selected={relation === 'Grandfather'}
-                  onPress={() => {
-                    setRelation('Grandfather');
-                    clearError('Grandfather');
-                  }}
-                />
-                <RelationItem
-                  label="Grandmother"
-                  selected={relation === 'Grandmother'}
-                  onPress={() => {
-                    setRelation('Grandmother');
-                    clearError('Grandmother');
-                  }}
-                />
-              </View>
-
-              {/* Row 3 */}
-              <RelationItem
-                label="Guardian"
-                fullWidth
-                selected={relation === 'Guardian'}
-                onPress={() => {
-                  setRelation('Guardian');
-                  clearError('Guardian');
-                }}
-              />
-            </View>
-
-            <View style={styles.saveWrapper}>
-              {Object.keys(errors).length > 0 && (
-                <View style={styles.errorContainer}>
-                  <Text style={styles.errorText}>
-                    !{' '}
-                    {errors.name ||
-                      errors.email ||
-                      errors.mobile ||
-                      errors.relation}
-                  </Text>
+              <View
+                style={[
+                  styles.relationGrid,
+                  errors.relation && styles.relationErrorBox,
+                ]}
+              >
+                {/* Row 1 */}
+                <View style={styles.relationRow}>
+                  <RelationItem
+                    label="Dad"
+                    selected={relation === 'Dad'}
+                    onPress={() => {
+                      setRelation('Dad');
+                      clearError('Dad');
+                    }}
+                  />
+                  <RelationItem
+                    label="Mom"
+                    selected={relation === 'Mom'}
+                    onPress={() => {
+                      setRelation('Mom');
+                      clearError('Mom');
+                    }}
+                  />
                 </View>
-              )}
 
-              <TouchableOpacity onPress={handleSave}>
-                <LinearGradient
-                  colors={['#667AFF', '#9324F0', '#4010AB']}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
-                  style={[styles.primaryBtn]}
-                >
-                  <Text style={styles.primaryBtnText}>
-                    {profile ? 'Update' : 'Save'}
-                  </Text>
-                </LinearGradient>
-              </TouchableOpacity>
+                {/* Row 2 */}
+                <View style={styles.relationRow}>
+                  <RelationItem
+                    label="Grandfather"
+                    selected={relation === 'Grandfather'}
+                    onPress={() => {
+                      setRelation('Grandfather');
+                      clearError('Grandfather');
+                    }}
+                  />
+                  <RelationItem
+                    label="Grandmother"
+                    selected={relation === 'Grandmother'}
+                    onPress={() => {
+                      setRelation('Grandmother');
+                      clearError('Grandmother');
+                    }}
+                  />
+                </View>
+
+                {/* Row 3 */}
+                <RelationItem
+                  label="Guardian"
+                  fullWidth
+                  selected={relation === 'Guardian'}
+                  onPress={() => {
+                    setRelation('Guardian');
+                    clearError('Guardian');
+                  }}
+                />
+              </View>
             </View>
+          </View>
+        )}
+
+        {/* ---------- FIXED BOTTOM ACTION ---------- */}
+        {mode !== 'view' && (
+          <View style={styles.fixedBottom}>
+            {Object.keys(errors).length > 0 && (
+              <View style={styles.fixedErrorBox}>
+                <Text style={styles.fixedErrorText}>
+                  !{' '}
+                  {errors.name ||
+                    errors.email ||
+                    errors.mobile ||
+                    errors.relation}
+                </Text>
+              </View>
+            )}
+
+            <TouchableOpacity
+              onPress={handleSave}
+              style={{ alignSelf: 'center' }}
+            >
+              <LinearGradient
+                colors={['#667AFF', '#9324F0', '#4010AB']}
+                locations={[0.0128, 0.5002, 0.9876]}
+                start={{ x: 0, y: 0.5 }}
+                end={{ x: 1, y: 0.52 }}
+                style={styles.fixedSaveBtn}
+              >
+                <Text style={styles.fixedSaveText}>
+                  {profile ? 'Update' : 'Save'}
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
           </View>
         )}
 
@@ -363,19 +346,49 @@ export default function ProfileScreen() {
         <Modal visible={showConfirmModal} transparent animationType="fade">
           <View style={styles.modalOverlay}>
             <View style={styles.modalBox}>
-              <TouchableOpacity style={styles.modalClose} />
+              {/* ❌ CLOSE ICON */}
+              <TouchableOpacity
+                style={styles.modalClose}
+                onPress={closeConfirmModal}
+                activeOpacity={0.7}
+              >
+                <XClose width={24} height={24} fill="#FFFFFF" />
+              </TouchableOpacity>
 
-              <Text style={styles.modalText}>
-                Do you want to save the changes?
-              </Text>
+              {/* 📝 TEXT */}
+              <View style={styles.modalTextWrapper}>
+                <Text style={styles.modalText}>Do you want to save the</Text>
+                <Text style={styles.modalText}>changes?</Text>
+              </View>
 
+              {/* 🔘 ACTION BUTTONS */}
               <View style={styles.modalActions}>
-                <TouchableOpacity style={styles.modalNoBtn}>
+                {/* NO */}
+                <TouchableOpacity
+                  style={styles.modalNoBtn}
+                  onPress={() => {
+                    closeConfirmModal();
+                    setDirty(false);
+                    navigation.goBack();
+                  }}
+                  activeOpacity={0.8}
+                >
                   <Text style={styles.modalNoText}>No</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{ flex: 1 }}>
-                  <LinearGradient style={styles.modalYesBtn}>
+                {/* YES */}
+                <TouchableOpacity
+                  style={{ flex: 1 }}
+                  onPress={handleSave}
+                  activeOpacity={0.9}
+                >
+                  <LinearGradient
+                    colors={['#667AFF', '#9324F0', '#4010AB']}
+                    locations={[0.0128, 0.5002, 0.9876]}
+                    start={{ x: 0, y: 0.5 }}
+                    end={{ x: 1, y: 0.52 }}
+                    style={styles.modalYesBtn}
+                  >
                     <Text style={styles.modalYesText}>Yes</Text>
                   </LinearGradient>
                 </TouchableOpacity>
@@ -403,7 +416,8 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
+    gap: spacing.md,
     paddingVertical: spacing.lg,
   },
   title: {
@@ -420,18 +434,6 @@ const styles = StyleSheet.create({
   inputError: {
     borderColor: '#FF4D4F',
     borderWidth: 1,
-  },
-
-  modalClose: {
-    position: 'absolute',
-    top: spacing.md,
-    right: spacing.md,
-    zIndex: 10,
-  },
-  modalCloseText: {
-    color: '#FFFFFF',
-    fontSize: fontScale(18),
-    fontFamily: fontFamily.medium,
   },
 
   errorContainer: {
@@ -487,6 +489,41 @@ const styles = StyleSheet.create({
     fontSize: fontScale(12),
     marginBottom: spacing.xs,
   },
+  fixedBottom: {
+    position: 'absolute',
+    left: spacing.lg,
+    right: spacing.lg,
+    bottom: isIOS ? verticalScale(24) : verticalScale(16),
+  },
+  fixedErrorBox: {
+    height: verticalScale(48),
+    borderRadius: moderateScale(12),
+    borderWidth: 1.5,
+    borderColor: '#CC202E',
+    backgroundColor: 'rgba(204, 32, 46, 0.1)',
+    justifyContent: 'center',
+    paddingHorizontal: spacing.md,
+    marginBottom: spacing.md,
+  },
+  fixedErrorText: {
+    color: '#FF4D4F',
+    fontSize: fontScale(14),
+    fontFamily: fontFamily.semiBold,
+  },
+
+  fixedSaveBtn: {
+    height: verticalScale(48),
+    width: scale(345),
+    borderRadius: moderateScale(12),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  fixedSaveText: {
+    color: '#FFFFFF',
+    fontSize: fontScale(18),
+    fontFamily: fontFamily.semiBold,
+  },
+
   value: {
     color: '#fff',
     fontSize: fontScale(15),
@@ -537,10 +574,6 @@ const styles = StyleSheet.create({
     paddingVertical: isIOS ? spacing.sm : spacing.xs,
   },
 
-  disabledInput: {
-    opacity: 0.6,
-  },
-
   relationGrid: {
     marginTop: spacing.md,
   },
@@ -575,28 +608,46 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  modalClose: {
+    position: 'absolute',
+    top: spacing.md,
+    right: spacing.md,
+    zIndex: 10,
+  },
+
   modalBox: {
     width: scale(343), // 375 - 16 - 16
     backgroundColor: '#1A1920',
     borderRadius: moderateScale(16),
-    paddingHorizontal: spacing.lg, // 16
     paddingTop: verticalScale(72),
     paddingBottom: spacing.lg,
+    paddingHorizontal: spacing.lg,
+  },
+
+  /* 📝 TEXT */
+  modalTextWrapper: {
+    paddingVertical: spacing.sm, // 8
+    paddingHorizontal: spacing.md, // 16
+    alignItems: 'center',
   },
 
   modalText: {
     color: '#FFFFFF',
-    textAlign: 'center',
     fontSize: fontScale(18),
     lineHeight: fontScale(26),
     fontFamily: fontFamily.regular,
-    paddingVertical: spacing.sm, // 8
+    textAlign: 'center',
   },
 
+  /* 🔘 BUTTONS */
   modalActions: {
+    height: verticalScale(91),
+    paddingTop: verticalScale(22),
+    paddingBottom: verticalScale(21),
+    paddingLeft: spacing.lg, // 20
+    paddingRight: spacing.md, // 16
     flexDirection: 'row',
-    marginTop: verticalScale(21),
-    gap: spacing.lg, // 16
+    gap: spacing.lg, // 19 approx
   },
 
   modalNoBtn: {
@@ -607,8 +658,8 @@ const styles = StyleSheet.create({
     borderColor: '#6D5FFD',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
   },
+
   modalNoText: {
     color: '#FFFFFF',
     fontSize: fontScale(16),
@@ -622,6 +673,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   modalYesText: {
     color: '#FFFFFF',
     fontSize: fontScale(16),

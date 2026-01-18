@@ -1,9 +1,11 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useRef } from 'react';
 import { View, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { fontFamily } from '../theme/typography';
 import SettingsStack from './SettingsStack';
+import RadioStack from './RadioStack';
 
 // SVG ICONS
 import LibraryIcon from '../../assets/icons/library.svg';
@@ -37,7 +39,7 @@ const ICONS = {
 /* ---------------------------------- */
 /* TAB ITEM (ICON + LABEL + ANIMATION) */
 /* ---------------------------------- */
-function TabItem({ label, Icon, focused, onPress }) {
+const TabItem = React.memo(function TabItem({ label, Icon, focused, onPress }) {
   const scales = useRef(new Animated.Value(1)).current;
   const opacity = useRef(new Animated.Value(0.6)).current;
   const translateY = useRef(new Animated.Value(4)).current;
@@ -65,7 +67,7 @@ function TabItem({ label, Icon, focused, onPress }) {
     <TouchableOpacity
       activeOpacity={0.85}
       onPress={onPress}
-      style={styles.tabItem}
+      style={[styles.tabItem, focused && styles.tabItemFocused]}
     >
       <Animated.View
         style={{
@@ -75,8 +77,8 @@ function TabItem({ label, Icon, focused, onPress }) {
         }}
       >
         <Icon
-          width={scale(25.33)}
-          height={scale(25.33)}
+          width={scale(26.33)}
+          height={scale(26.33)}
           fill={focused ? '#FFFFFF' : '#17191A'}
         />
 
@@ -96,7 +98,7 @@ function TabItem({ label, Icon, focused, onPress }) {
       </Animated.View>
     </TouchableOpacity>
   );
-}
+});
 
 /* ---------------------------------- */
 /* CUSTOM TAB BAR */
@@ -109,12 +111,13 @@ function CustomTabBar({ state, navigation }) {
   if (
     focusedRouteName === 'Profile' ||
     focusedRouteName === 'KidsProfile' ||
-    focusedRouteName === 'Guardrails' ||
-    focusedRouteName === 'LearningTheme' ||
+    focusedRouteName === 'ContentSafety' ||
+    focusedRouteName === 'Parenting' ||
     focusedRouteName === 'KidProfileView' ||
     focusedRouteName === 'Faq' ||
     focusedRouteName === 'Orders' ||
-    focusedRouteName === 'OrderDetails'
+    focusedRouteName === 'OrderDetails' ||
+    focusedRouteName === 'RadioChannel'
   ) {
     return null;
   }
@@ -150,12 +153,12 @@ export default function BottomBarNavigation() {
   return (
     <Tab.Navigator
       screenOptions={{ headerShown: false }}
-      tabBar={props => <CustomTabBar {...props} />}
+      tabBar={CustomTabBar}
       initialRouteName="Home"
     >
       <Tab.Screen name="Library" component={PlaceholderScreen} />
       <Tab.Screen name="Shop" component={PlaceholderScreen} />
-      <Tab.Screen name="Home" component={PlaceholderScreen} />
+      <Tab.Screen name="Home" component={RadioStack} />
       <Tab.Screen name="Rewards" component={PlaceholderScreen} />
       <Tab.Screen name="Settings" component={SettingsStack} />
     </Tab.Navigator>
@@ -172,18 +175,14 @@ const styles = StyleSheet.create({
   },
   tabBar: {
     flexDirection: 'row',
-
     /* Figma: height 94 */
     height: verticalScale(94),
-
     /* Figma padding: 8px 16px 32px 16px */
     paddingTop: verticalScale(8),
     paddingHorizontal: scale(16),
     paddingBottom: verticalScale(32),
-
     justifyContent: 'space-between',
     alignItems: 'center',
-
     backgroundColor: '#17191A',
 
     /* Shadow/xs */
@@ -192,6 +191,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 2,
     elevation: 2, // Android shadow
+  },
+  tabItemFocused: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -10 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 6,
   },
 
   tabItem: {
@@ -202,7 +208,7 @@ const styles = StyleSheet.create({
 
   label: {
     marginTop: verticalScale(6),
-    fontSize: fontScale(12), // Figma bottom tabs usually 12
+    fontSize: fontScale(13), // Figma bottom tabs usually 12
     lineHeight: fontScale(14),
     color: '#4B5057',
     fontFamily: fontFamily.regular,

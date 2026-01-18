@@ -1,10 +1,10 @@
 import { fontScale } from '../utils/responsive';
 
 export const fontFamily = {
-  regular: 'Inter-Regular',
-  medium: 'Inter-Medium',
-  semiBold: 'Inter-SemiBold',
-  bold: 'Inter-Bold',
+  regular: 'Quicksand-Regular',
+  medium: 'Quicksand-Medium',
+  semiBold: 'Quicksand-SemiBold',
+  bold: 'Quicksand-Bold',
 };
 
 export const typography = {
