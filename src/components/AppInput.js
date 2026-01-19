@@ -1,6 +1,6 @@
 /* AppInput.js */
-import React, { useState, useRef } from 'react';
-import { View, TextInput, StyleSheet, Animated, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { View, TextInput, StyleSheet, Platform } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import {
@@ -24,42 +24,25 @@ export default function AppInput({
   maxLength,
 }) {
   const [focused, setFocused] = useState(false);
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-
-  /* 🔥 subtle focus animation */
-  const onFocus = () => {
-    setFocused(true);
-    Animated.spring(scaleAnim, {
-      toValue: 1.01,
-      useNativeDriver: true,
-      speed: 20,
-    }).start();
-  };
-
-  const onBlur = () => {
-    setFocused(false);
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      useNativeDriver: true,
-      speed: 20,
-    }).start();
-  };
 
   const isFilled = !!value?.length;
-
-  const showFocusStyle = focused || isFilled;
+  const isActive = focused || isFilled;
 
   return (
-    <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
-      <LinearGradient
-        colors={
-          showFocusStyle
-            ? ['rgba(255,255,255,0.10)', 'rgba(255,255,255,0.10)']
-            : ['#1A1920', '#1A1920']
-        }
+    <View style={styles.wrapper}>
+      {/* 🔥 GRADIENT OVERLAY (FOCUS / FILLED ONLY) */}
+      {isActive && !error && (
+        <LinearGradient
+          colors={['rgba(255,255,255,0.10)', 'rgba(255,255,255,0.10)']}
+          style={styles.gradientOverlay}
+        />
+      )}
+
+      {/* INPUT CONTAINER */}
+      <View
         style={[
           styles.container,
-          showFocusStyle && styles.focusedBorder,
+          isActive && styles.focusedBorder,
           error && styles.errorBorder,
         ]}
       >
@@ -75,38 +58,50 @@ export default function AppInput({
           autoCorrect={autoCorrect}
           maxLength={maxLength}
           style={styles.input}
-          onFocus={onFocus}
-          onBlur={onBlur}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
         />
-      </LinearGradient>
-    </Animated.View>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    position: 'relative',
+    marginBottom: spacing.lg,
+  },
+
+  gradientOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: moderateScale(8),
+  },
+
   container: {
     flexDirection: 'row',
     alignItems: 'center',
 
     height: verticalScale(48),
-    borderRadius: moderateScale(8), // 🔥 Figma: 8px
+    borderRadius: moderateScale(8),
     paddingHorizontal: spacing.md,
 
     backgroundColor: '#1A1920',
     borderWidth: 1,
     borderColor: '#2C2C2E',
-
-    marginBottom: spacing.lg,
   },
 
   focusedBorder: {
-    borderWidth: 1.5, // 🔥 Figma: 1.5px
+    borderWidth: 1.5,
     borderColor: '#FFFFFF',
   },
 
   errorBorder: {
-    borderColor: '#FF4D4F',
     borderWidth: 1.5,
+    borderColor: '#FF4D4F',
   },
 
   icon: {
@@ -119,6 +114,12 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: fontScale(15),
     fontFamily: fontFamily.regular,
-    paddingVertical: isIOS ? spacing.sm : spacing.xs,
+
+    paddingVertical: 0, // 🔥 IMPORTANT
+    lineHeight: fontScale(18), // 🔥 fixes iOS vertical mismatch
+
+    ...(isIOS && {
+      marginTop: 1, // tiny optical fix
+    }),
   },
 });

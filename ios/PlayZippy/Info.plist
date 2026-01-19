@@ -35,6 +35,16 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string/>
+	<key>RCTNewArchEnabled</key>
+	<true/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>quicksandLight.ttf</string>
+		<string>quicksandMedium.ttf</string>
+		<string>quicksandRegular.ttf</string>
+		<string>quicksandBold.ttf</string>
+		<string>quicksandSemiBold.ttf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -49,13 +59,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIAppFonts</key>
-	<array>
-		<string>quicksandBold.ttf</string>
-		<string>quicksandLight.ttf</string>
-		<string>quicksandMedium.ttf</string>
-		<string>quicksandRegular.ttf</string>
-		<string>quicksandSemiBold.ttf</string>
-	</array>
 </dict>
 </plist>

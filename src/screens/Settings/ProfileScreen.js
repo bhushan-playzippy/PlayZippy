@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
-  TextInput,
   Modal,
   StyleSheet,
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
-import BackLeft from '../../../assets/icons/backLeft.svg';
+import AppHeader from '../../components/AppHeader';
 import { useProfileStore } from '../../store/profile.store';
 import RelationItem from '../../components/RelationItem';
 import { colors } from '../../theme/colors';
@@ -54,7 +54,6 @@ export default function ProfileScreen() {
   const [email, setEmail] = useState(profile?.email || '');
   const [mobile, setMobile] = useState(profile?.mobile || '');
   const [relation, setRelation] = useState(profile?.relation || null);
-  const [focusedField, setFocusedField] = useState(null);
   const [errors, setErrors] = useState({});
 
   /* ---------------- Initial Mode ---------------- */
@@ -143,12 +142,6 @@ export default function ProfileScreen() {
     setMode('view');
   };
 
-  const getInputStyle = field => [
-    styles.inputBox,
-    focusedField === field && styles.inputFocused,
-    errors[field] && styles.inputError,
-  ];
-
   /* ================================================= */
   /* =================== RENDER ====================== */
   /* ================================================= */
@@ -156,18 +149,13 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={styles.keyboardTypeStyle}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}
       >
         {/* ---------------- Header ---------------- */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <BackLeft width={24} height={24} fill="#FFFFFF" />
-          </TouchableOpacity>
-          <Text style={styles.title}>My Profile</Text>
-          {/* <View style={{ width: 24 }} /> */}
-        </View>
+
+        <AppHeader title="My Profile" showBack={true} onRightPress={() => {}} />
 
         {/* ================= VIEW MODE ================= */}
         {mode === 'view' && profile && (
@@ -205,7 +193,11 @@ export default function ProfileScreen() {
         {/* ================= CREATE / EDIT ================= */}
         {mode !== 'view' && (
           <View style={{ flex: 1 }}>
-            <View style={styles.form}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.formContent}
+              keyboardShouldPersistTaps="handled"
+            >
               <AppInput
                 value={name}
                 placeholder="Name"
@@ -304,13 +296,13 @@ export default function ProfileScreen() {
                   }}
                 />
               </View>
-            </View>
+            </ScrollView>
           </View>
         )}
 
         {/* ---------- FIXED BOTTOM ACTION ---------- */}
         {mode !== 'view' && (
-          <View style={styles.fixedBottom}>
+          <View style={styles.stickyFooter}>
             {Object.keys(errors).length > 0 && (
               <View style={styles.fixedErrorBox}>
                 <Text style={styles.fixedErrorText}>
@@ -412,6 +404,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
   },
 
+  keyboardTypeStyle: {
+    flex: 1,
+  },
+
   /* ---------------- Header ---------------- */
   header: {
     flexDirection: 'row',
@@ -460,6 +456,10 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.semiBold,
   },
 
+  formContent: {
+    paddingBottom: verticalScale(140), // space for sticky button
+  },
+
   /* ---------------- View Mode ---------------- */
   viewContainer: {
     marginTop: spacing.lg,
@@ -489,12 +489,13 @@ const styles = StyleSheet.create({
     fontSize: fontScale(12),
     marginBottom: spacing.xs,
   },
-  fixedBottom: {
-    position: 'absolute',
-    left: spacing.lg,
-    right: spacing.lg,
-    bottom: isIOS ? verticalScale(24) : verticalScale(16),
+  stickyFooter: {
+    paddingHorizontal: spacing.lg,
+    paddingBottom: isIOS ? verticalScale(32) : verticalScale(24),
+    paddingTop: spacing.md,
+    backgroundColor: colors.background,
   },
+
   fixedErrorBox: {
     height: verticalScale(48),
     borderRadius: moderateScale(12),
@@ -513,11 +514,12 @@ const styles = StyleSheet.create({
 
   fixedSaveBtn: {
     height: verticalScale(48),
-    width: scale(345),
+    width: '100%',
     borderRadius: moderateScale(12),
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   fixedSaveText: {
     color: '#FFFFFF',
     fontSize: fontScale(18),

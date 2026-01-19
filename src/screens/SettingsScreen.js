@@ -3,7 +3,6 @@ import { View, StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
-import { useProfileStore } from '../store/profile.store';
 import { useKidsProfileStore } from '../store/kidsProfile.store';
 import SettingsItem from '../components/SettingsItem';
 import { colors } from '../theme/colors';
@@ -118,7 +117,8 @@ const styles = StyleSheet.create({
 
   textRow: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    // justifyContent: 'space-evenly',
+    gap: moderateScale(24),
     marginBottom: spacing.md,
   },
 
@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
 
   text: {
     color: '#888',
-    fontSize: fontScale(12),
+    fontSize: fontScale(18),
     textAlign: 'center',
-    fontFamily: fontFamily.medium,
+    fontFamily: fontFamily.bold,
   },
 });
